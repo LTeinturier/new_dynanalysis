@@ -1,0 +1,25 @@
+[Planet]
+name='WASP-43 b'
+a=74.0657e6 #mean radius
+mass=3.89e27
+g=47.1
+rsm=2.282863506882e9
+day=70284. #in seconds
+eccentricity=0.0
+obliquity=0.0
+year=70284. #in seconds
+M=2.326 #Mean molecular weight
+cp=13557.2 #Specific heat capacity
+T0=1400 #Typical atmospheric temperature
+
+[Run_parameters]
+is_omega= True #if we have the vertical wind in GCM output
+includels = False 
+use_spline = False 
+temperature_field ="temp" #the string for the temperature field in GCM output
+p_upper= 1e1
+p_lower=8e7
+nlev=40
+day_per_year=1
+nopole=True
+charx="-180,180"
