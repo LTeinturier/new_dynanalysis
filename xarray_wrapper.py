@@ -41,10 +41,7 @@ class wrapper():
     
     def get(self):
         ##open dataset
-        print("---before opening---")
-        print(self.file)
         ds= self.open()
-        print("---opened smoothly--")
         #prepare stuff
         dalist = []
         dalistm = []
@@ -84,7 +81,11 @@ class wrapper():
         return self.getf(),xd.values,yd.values,zd.values,td.values ##returns value of the field + coordinates
     
     
-# if __name__=="__main__":
+if __name__=="__main__":
+    gcm_output='diagfi80.nc'
+    charx="-180,180"
+    press=wrapper(file=gcm_output,var='p',x=charx).getf()
+    print(press.shape)
 #     import os 
 #     path = '../wasp43b/'
 #     file='diagfi80.nc'#os.path.join(path,'diagfi80.nc')
