@@ -65,6 +65,10 @@ class wrapper():
                 print("computation X-[X]")
                 mm=ds[self.var].mean(self.zonadim)
                 dsred = dsred-mm
+            elif "pert_t" in self.compute:
+                print("computation X-Xbar")
+                mm = ds[self.var].mean(self.timedim)
+                dsred = dsred-mm
         else:
             dsred = dsred.mean(dalistm)
         return dsred

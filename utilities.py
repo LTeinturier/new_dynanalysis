@@ -1,6 +1,6 @@
 import numpy as np 
 from scipy.interpolate import interp1d
-
+import xarray as xr
 
 def interpolate(targetp1d,sourcep3d,fieldsource3d,spline=False):
     """targetp1d: 1D pressure field on which the interpolation is made
@@ -38,7 +38,7 @@ def fix_time_axis(tdim,period):
         if tdim[ii]-tdim[ii-1] <0:
             nperiod +=1
         corrected_tdim[ii] = float(nperiod) + float(tdim[ii]/period)
-    return corrected_ttdim
+    return corrected_tdim
 
 def correctnearzero(field):
     """Correct smal value to nan to get rid of numerical instabilities
@@ -71,3 +71,14 @@ def mean(field,axis=None):
             return zout
     else:
         return np.nanmean(field,axis=axis,dtype=np.float64)
+    
+def create_output_file(tdim,pseudoz,ydim):
+    ds=xr.Dataset(
+        coords=dict(
+            Time=(['Time'],tdim),
+            pseudoalt=(['pseudoalt'],pseudoz),
+            lat=(['lat'],ydim)
+        )
+    )
+    # print(ds)
+    return ds

@@ -23,3 +23,4 @@ nlev=40
 day_per_year=1
 nopole=True
 charx="-180,180"
+compute_transport=True

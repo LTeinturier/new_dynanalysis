@@ -4,6 +4,11 @@ import scipy.constants as cst
 from configobj import ConfigObj
 import sys 
 from distutils.util import strtobool
+##################################################################################
+# This is a mix between the Planet() class of A.Spiga and custom routines 
+# to deal with the inputs (the parfile)
+# By Lucas Teinturier (2023)
+###################################################################################
 
 #-------------Basic physical constants-------------------
 G = cst.G          # Gravitational constant
@@ -117,6 +122,14 @@ class Planet():
         # self.show()
         self.calculate()
     ###Computation used later
+    
+    def dayperyear(self):
+        calc = (self.year is not None) and (self.day is not None)
+        if calc:
+            return self.year/ self.day
+        else:
+            return None
+        
     def disk(self):
         """ Planetary disk area"""
         return np.pi*self.a*self.a
@@ -137,7 +150,7 @@ class Planet():
         
     def H(self,T0=None,M=None):
         """scale height. M is in g/mol"""
-        if Tp is None:
+        if T0 is None:
             T0=self.T0
         if M is None:
             RR=self.R
@@ -163,7 +176,7 @@ class Planet():
         """Variation of coriolis parameter with latitude (df/dy)"""
         if lat is None:
             lat=0.
-        return 2*self.omega*np.cos(p.deg2rad(lat))/self.a
+        return 2*self.omega*np.cos(np.deg2rad(lat))/self.a
     
     def angmom(self,u=None,lat=None):
         """Axial Angular momentum
@@ -176,19 +189,19 @@ class Planet():
         acosphi=self.acosphi(lat)
         return acosphi*((self.omega*acosphi)+u)
     
-    def wangmon(self,u=None,lat=None):
+    def wangmom(self,u=None,lat=None):
         """Axial Angular momentum due to wind ONLY
         """
         if lat is None:
             lat=0.
         if u is None:
             u=0.
-            return u*self.acosphi(lat)
+        return u*self.acosphi(lat)
     
     def superrot(self,u=None,lat=None):
         """Super-rotation index"""
-        aam=self.angmom(u=u,lat=lat)/self.angmom
-        return amm-1.
+        aam=self.angmom(u=u,lat=lat)/self.angmom()
+        return aam-1.
     
     def exner(self,p,p0=1.e5):
         return (p/p0)**(self.R/self.cp)
@@ -209,10 +222,11 @@ class RunParameter():
         self.temperature_field=conf['temperature_field']
         self.p_upper=float(conf['p_upper'])
         self.p_lower = float(conf['p_lower'])
-        self.nlev = float(conf['nlev'])
+        self.nlev = int(conf['nlev'])
         self.day_per_year = float(conf['day_per_year']) 
         self.nopole= bool(strtobool(conf['nopole'])) 
         self.charx = conf['charx']
+        self.compute_transport = bool(strtobool(conf['compute_transport']))
             
     def show(self):
         for k,v, in list(vars(self).items()):
