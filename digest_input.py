@@ -43,7 +43,7 @@ class Planet():
         self.albedo = None 
         desc["albedo"] = "Bond albedo (fraction)"
         self.rsm = None 
-        desc["rsm"] = "Semi-major axis of orbit about Sun (m)"
+        desc["rsm"] = "Semi-major axis of orbit around the star (m)"
         self.year = None 
         desc["year"] = "Sidereal length of year (s)"
         self.eccentricity = None 
@@ -209,7 +209,7 @@ class Planet():
     def tpot(self,temp,p,p0=1.e5):
         """returns potential temperature from temperature"""
         return temp/self.exner(p,p0=p0)
-    def invtpot(self,tpot,p,po = 1.e5):
+    def invtpot(self,tpot,p,p0 = 1.e5):
         """returns temperature, using potential temperature"""
         return tpot*self.exner(p,p0=p0)
     

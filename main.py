@@ -6,8 +6,8 @@ from scipy.integrate import simps
 import xarray as xr 
 
 def main():
-    gcm_output = 'diagfi80.nc'
-    parfile = 'w43b.par'
+    gcm_output = '/home/lteinturier/Documents/PhD/HD189/from_mesopsl/diagfi40.nc'
+    parfile = 'hd189.par'
     ## Initialisation of the planets and reading of parfile
     myp=input.Planet(parfile)
     myp.ini()
@@ -125,6 +125,11 @@ def main():
                        dims=['Time','pseudoalt','lat'],
                        attrs={"units":"m/s","long_name":"Zonal wind"})
     ds['u']=xar
+    xar = xar = xr.DataArray(v,
+                       coords={'Time':tdim,"pseudoalt":pseudoz,'lat':ydim},
+                       dims=['Time','pseudoalt','lat'],
+                       attrs={"units":"m/s","long_name":"Meridional wind"})
+    ds['v']=xar
     xar = xr.DataArray(angmom,
                        coords={'Time':tdim,"pseudoalt":pseudoz,'lat':ydim},
                        dims=['Time','pseudoalt','lat'],
@@ -225,7 +230,7 @@ def main():
                        dims=['pseudoalt','lat'],
                        attrs={"units":" m.K.s-1","long_name":"Vertical transport of tpot by transient waves"})
         ds['tw_w_tpot']=xar
-    ds.to_netcdf("test.nc")
+    ds.to_netcdf("results/HD189/cloudless.nc")
     ## We're done with transport diagnostics
     # print("Computing streamfunction now ")
     # psim = np.zeros((nt,nz,nlat))
